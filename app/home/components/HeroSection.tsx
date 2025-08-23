@@ -21,6 +21,16 @@ export default function HeroSection() {
             Communicate With Deaf And Hard Of Hearing People
             <span className="inline-block ml-4">🤟</span>
           </h1>
+
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-12 leading-relaxed">
+            Project to recognize sign language and promote greater awareness and sensitivity toward the Deaf and Hard of Hearing community, Mix
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <button className="border-2 border-teal-600 text-teal-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-teal-600 hover:text-white transition-all duration-300">
+              Try it now
+            </button>
+          </div>
         </div>
       </div>
     </section>
