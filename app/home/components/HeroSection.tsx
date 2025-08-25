@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HeroSection() {
   return (
     <section className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -27,9 +29,14 @@ export default function HeroSection() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="border-2 border-teal-600 text-teal-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-teal-600 hover:text-white transition-all duration-300">
-              Try it now
-            </button>
+            <Link
+              className="border-2 border-teal-600 text-teal-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-teal-600 hover:text-white transition-all duration-300"
+                href={{
+                  pathname: '/fingerspelling',
+                }}
+              >
+                Try it now
+            </Link>
           </div>
         </div>
       </div>
