@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useTransition } from "react";
+import React, { useEffect, useRef, useState, useTransition } from "react";
 import { useWebcam } from "../hooks/useWebcam";
 import { useTensorFlowModel } from "../hooks/useTensorFlowModel";
 import { CAPTURE_INTERVAL } from "../lib/constants/webcam.constants";
@@ -12,13 +12,14 @@ import { useLanguage } from "@/components/LanguageProvider";
 import { parseLanguage } from "../lib/language";
 import LanguageSelector from "@/components/LanguageSelector";
 import {  } from "next/navigation";
+import autocorrect from "../services/api/server";
 
 export default function Predict() {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
   const [isPending, startTransition] = useTransition();
-
+  const [phrase, setPhrase] = useState('');
   const { language, setLanguage } = useLanguage();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -28,6 +29,24 @@ export default function Predict() {
   const { model } = useTensorFlowModel();
 
   const isLoading = !handLandmarker || !model;
+
+  // This is the call from Render, quite slow to test
+useEffect(() => {
+  console.log("Hi");
+
+  async function runAutocorrect() {
+    try {
+      const corrected = await autocorrect("TAKLTOME");
+      console.log("This is autocorrect:", corrected);
+    } catch (err) {
+      console.error("Autocorrect failed:", err);
+    }
+  }
+
+  runAutocorrect();
+}, []);
+
+
 
   // One-time URL override
   useEffect(() => {
@@ -89,12 +108,15 @@ export default function Predict() {
       if (results.worldLandmarks.length >= 1) {
         const landmarkTensor = preprocessHandLandmarks(results.worldLandmarks);
         const predictionResult = await getPrediction(model, landmarkTensor);
-
+        // This one for the Letter not be captured multiple times every frame
+        if (predictionResult.letter != 'None detected') {
+          setTimeout(() => { 
+            setPhrase(phrase + predictionResult.letter)
+          }, 500);
+        }
 
         drawLandmarks(context, results.landmarks, canvas);
-        drawPrediction(context, predictionResult.letter, canvas);
-
-        
+        drawPrediction(context, phrase, canvas);
       }
     }
 
@@ -114,7 +136,7 @@ export default function Predict() {
     videoRef,
     handLandmarker,
     model,
-
+    phrase
   ])
 
   return (
