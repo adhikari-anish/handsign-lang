@@ -10,7 +10,7 @@ export default function HomePage() {
     <div className="min-h-screen">
       <Header/>
       <HeroSection/>
-      <div className="py-24">
+      <div className="pb-18">
         <HomeLanguageCards />
       </div>
       <Footer/>
